@@ -1,3 +1,5 @@
 *.jpg
 *.png
 cifar_data
+*.zip
+.DS_Store
