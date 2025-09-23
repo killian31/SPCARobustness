@@ -8,7 +8,13 @@ import torch
 import torch.nn as nn
 from sklearn.preprocessing import StandardScaler
 
-from spcarobustness.models.components import FixedLinear, FixedScaler, ClassifierNN, PipelineModel, ImageFlattenWrapper
+from spcarobustness.models.components import (
+    FixedLinear,
+    FixedScaler,
+    ClassifierNN,
+    PipelineModel,
+    ImageFlattenWrapper,
+)
 
 
 def model_path(
@@ -21,7 +27,9 @@ def model_path(
     spca_mode: Optional[str] = None,
 ) -> str:
     os.makedirs(models_dir, exist_ok=True)
-    algo_label = algo if algo != "spca" else (f"spca-{spca_mode}" if spca_mode else "spca")
+    algo_label = (
+        algo if algo != "spca" else (f"spca-{spca_mode}" if spca_mode else "spca")
+    )
     fname = f"{dataset}_{algo_label}_ncomp-{n_components}_classes-{num_classes}_input-{input_dim}.pt"
     return os.path.join(models_dir, fname)
 

@@ -3,7 +3,9 @@ import sys
 from typing import Optional
 
 
-def configure_logging(level: int = logging.INFO, log_to_file: Optional[str] = None) -> logging.Logger:
+def configure_logging(
+    level: int = logging.INFO, log_to_file: Optional[str] = None
+) -> logging.Logger:
     logger = logging.getLogger("spcarobustness")
     logger.setLevel(level)
     # Avoid duplicate handlers if called multiple times

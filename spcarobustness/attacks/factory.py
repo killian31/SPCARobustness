@@ -8,7 +8,12 @@ from art.attacks.evasion import (
 )
 
 
-def make_attack(classifier, attack_name: str, eps: float, attack_params: Dict[str, Any] | None = None):
+def make_attack(
+    classifier,
+    attack_name: str,
+    eps: float,
+    attack_params: Dict[str, Any] | None = None,
+):
     if attack_params is None:
         attack_params = {}
 
@@ -19,11 +24,15 @@ def make_attack(classifier, attack_name: str, eps: float, attack_params: Dict[st
     name = attack_name.upper()
     if name == "FGSM":
         eps_step = float(attack_params.get("eps_step", eps))
-        return FastGradientMethod(classifier, norm=norm, eps=eps, eps_step=eps_step, batch_size=batch_size)
+        return FastGradientMethod(
+            classifier, norm=norm, eps=eps, eps_step=eps_step, batch_size=batch_size
+        )
 
     eps_step = attack_params.get("eps_step", None)
     if eps_step is None:
-        eps_step_ratio = attack_params.get("eps_step_ratio", 0.25 if name == "PGD" else 0.10)
+        eps_step_ratio = attack_params.get(
+            "eps_step_ratio", 0.25 if name == "PGD" else 0.10
+        )
         eps_step = eps * float(eps_step_ratio)
     eps_step = float(max(eps_step, 1e-6))
     max_iter = int(attack_params.get("max_iter", 40 if name == "PGD" else 10))
@@ -64,4 +73,6 @@ def make_attack(classifier, attack_name: str, eps: float, attack_params: Dict[st
             batch_size=batch_size,
         )
 
-    raise ValueError(f"Unsupported attack_name '{attack_name}'. Choose from FGSM, PGD, MIM, SQUARE.")
+    raise ValueError(
+        f"Unsupported attack_name '{attack_name}'. Choose from FGSM, PGD, MIM, SQUARE."
+    )

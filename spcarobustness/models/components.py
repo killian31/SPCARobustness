@@ -38,7 +38,9 @@ class FixedScaler(nn.Module):
 
 
 class ClassifierNN(nn.Module):
-    def __init__(self, input_dim: int, num_classes: int = 10, hidden: Optional[int] = 128):
+    def __init__(
+        self, input_dim: int, num_classes: int = 10, hidden: Optional[int] = 128
+    ):
         super().__init__()
         hidden = hidden or 128
         self.fc1 = nn.Linear(input_dim, hidden)
@@ -49,7 +51,9 @@ class ClassifierNN(nn.Module):
 
 
 class PipelineModel(nn.Module):
-    def __init__(self, fixed_transform: nn.Module, fixed_scaler: nn.Module, classifier: nn.Module):
+    def __init__(
+        self, fixed_transform: nn.Module, fixed_scaler: nn.Module, classifier: nn.Module
+    ):
         super().__init__()
         self.fixed_transform = fixed_transform
         self.fixed_scaler = fixed_scaler

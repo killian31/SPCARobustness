@@ -85,7 +85,9 @@ def show_adversarial_samples_mnist(
 
     axes[0, 0].set_ylabel("PCA")
     axes[1, 0].set_ylabel("SPCA")
-    plt.suptitle(f"{attack_name} (norm={norm_label}): Adv Samples (n_components={ncp})", y=0.98)
+    plt.suptitle(
+        f"{attack_name} (norm={norm_label}): Adv Samples (n_components={ncp})", y=0.98
+    )
     plt.tight_layout()
     os.makedirs(directory, exist_ok=True)
     out_png = (

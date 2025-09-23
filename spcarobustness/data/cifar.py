@@ -29,10 +29,20 @@ def load_cifar10_binary_airplane_frog(n_samples: Optional[int] = None, seed: int
         n_train = int(n_samples * 0.8)
         n_test = int(n_samples * 0.2)
         rng = np.random.RandomState(seed)
-        idx_train = rng.choice(len(X_train_full), size=min(n_train, len(X_train_full)), replace=False)
-        idx_test = rng.choice(len(X_test_full), size=min(n_test, len(X_test_full)), replace=False)
+        idx_train = rng.choice(
+            len(X_train_full), size=min(n_train, len(X_train_full)), replace=False
+        )
+        idx_test = rng.choice(
+            len(X_test_full), size=min(n_test, len(X_test_full)), replace=False
+        )
         X_train, y_train = X_train_full[idx_train], y_train_full[idx_train]
         X_test, y_test = X_test_full[idx_test], y_test_full[idx_test]
         return X_train, X_test, y_train, y_test, (len(X_train) + len(X_test))
     else:
-        return X_train_full, X_test_full, y_train_full, y_test_full, (len(X_train_full) + len(X_test_full))
+        return (
+            X_train_full,
+            X_test_full,
+            y_train_full,
+            y_test_full,
+            (len(X_train_full) + len(X_test_full)),
+        )
