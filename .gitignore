@@ -3,3 +3,4 @@
 cifar_data
 *.zip
 .DS_Store
+.vscode
