@@ -1,8 +1,9 @@
-from typing import Dict, List
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.colors import Normalize
 import os
+from typing import Dict, List
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.colors import Normalize
 
 
 def plot_benchmark(

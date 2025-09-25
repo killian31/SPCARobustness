@@ -1,7 +1,8 @@
 from __future__ import annotations
-import os
+
 import json
-from typing import Optional, Tuple, Dict, Any
+import os
+from typing import Any, Dict, Optional, Tuple
 
 import numpy as np
 import torch
@@ -9,11 +10,11 @@ import torch.nn as nn
 from sklearn.preprocessing import StandardScaler
 
 from spcarobustness.models.components import (
+    ClassifierNN,
     FixedLinear,
     FixedScaler,
-    ClassifierNN,
-    PipelineModel,
     ImageFlattenWrapper,
+    PipelineModel,
 )
 
 
@@ -89,15 +90,13 @@ def load_classifier(
     model = PipelineModel(fixed_transform, fixed_scaler, classifier_nn).to(device)
     model.classifier.load_state_dict(classifier_state)
 
-    # Build fresh ART classifier for attacks
-    import torch.optim as optim
     import torch.nn as nn
+    import torch.optim as optim
     from art.estimators.classification import PyTorchClassifier
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
 
-    # Determine image shape if known (so attacks like SquareAttack accept input)
     dataset_guess = os.path.basename(path).split("_")[0]
     image_shape = None
     if dataset_guess == "mnist" or input_dim == 784:

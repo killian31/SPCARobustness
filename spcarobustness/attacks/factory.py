@@ -1,4 +1,5 @@
-from typing import Dict, Any
+from typing import Any, Dict
+
 import numpy as np
 from art.attacks.evasion import (
     FastGradientMethod,

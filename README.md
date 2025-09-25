@@ -43,6 +43,7 @@ Adversarial attacks are implemented using IBM's Adversarial Robustness Toolbox (
 - Optional: CUDA-capable GPU with matching PyTorch build
 
 All Python dependencies are listed in `requirements.txt`. Datasets are downloaded automatically:
+
 - MNIST via `sklearn.fetch_openml`
 - CIFAR-10 via `torchvision.datasets.CIFAR10` into `./cifar_data`
 
@@ -65,6 +66,7 @@ pip install -r requirements.txt
 ```
 
 For GPU acceleration with CUDA 12.1:
+
 ```powershell
 pip uninstall -y torch torchvision
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -87,6 +89,7 @@ pip install -r requirements.txt
 ```
 
 For GPU acceleration with CUDA 12.1:
+
 ```bash
 pip uninstall -y torch torchvision
 pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
@@ -103,6 +106,7 @@ python main.py --dataset mnist --attacks ALL
 ```
 
 Run with specific attacks and custom parameters:
+
 ```powershell
 python main.py --dataset mnist --attacks FGSM PGD MIM --n-components 100 150 200 --eps-start 0.01 --eps-end 0.2 --save-samples
 ```
@@ -116,6 +120,7 @@ python main.py --dataset cifar-binary --attacks ALL --eps-end 0.1
 ```
 
 Run with specific configuration for faster execution:
+
 ```powershell
 python main.py --dataset cifar-binary --attacks FGSM PGD MIM SQUARE --n-components 100 150 --eps-start 0.01 --eps-end 0.1 --n-samples 5000 --save-models
 ```
@@ -158,6 +163,7 @@ Use `--attacks ALL` to run all attacks, or specify individual attacks: `--attack
 ### Model Caching
 
 Enable model caching for faster repeated experiments:
+
 ```powershell
 python main.py --dataset mnist --attacks ALL --save-models --models-dir cached_models
 ```
@@ -165,6 +171,7 @@ python main.py --dataset mnist --attacks ALL --save-models --models-dir cached_m
 ### Performance Tuning
 
 For faster execution during development:
+
 ```powershell
 python main.py --dataset mnist --attacks FGSM PGD --n-components 64 128 --n-samples 2000 --epochs 10 --attack-n-test 1000
 ```
@@ -172,6 +179,7 @@ python main.py --dataset mnist --attacks FGSM PGD --n-components 64 128 --n-samp
 ### Attack Configuration
 
 Fine-tune attack parameters:
+
 ```powershell
 python main.py --dataset cifar-binary --attacks SQUARE --square-max-iter 500 --square-restarts 3 --attack-batch-size 128
 ```
@@ -180,15 +188,18 @@ python main.py --dataset cifar-binary --attacks SQUARE --square-max-iter 500 --s
 
 The system generates several types of output files:
 
-**Robustness Plots**: 
+**Robustness Plots**:
+
 - Format: `{dataset}_{attack}_norm_{norm}_eps_{start}_to_{end}_ncomp_{components}_nsamples_{n}.png`
 - Example: `mnist_fgsm_norm_l2_eps_0.01_to_0.2_ncomp_100_to_200_nsamples_60000.png`
 
 **Adversarial Sample Visualizations** (when `--save-samples` is enabled):
+
 - Directory format: `adv_samples_{attack}_norm_{norm}_eps_{start}_to_{end}_ncomp_{components}_nsamples_{n}/`
 - Contains side-by-side comparisons of clean vs adversarial examples
 
 **Cached Models** (when `--save-models` is enabled):
+
 - Directory: `models/` (or custom via `--models-dir`)
 - Contains serialized PCA/SPCA transformations and trained classifiers
 
@@ -197,16 +208,19 @@ The system generates several types of output files:
 **PyTorch Installation Issues**: Ensure you install a build matching your platform and CUDA version. See [PyTorch installation guide](https://pytorch.org/get-started/locally/).
 
 **Memory Issues**: Reduce batch sizes or limit test samples:
+
 ```powershell
 python main.py --attack-batch-size 64 --attack-n-test 2000
 ```
 
 **Long Runtimes**: Use fewer components and smaller datasets for initial testing:
+
 ```powershell
 python main.py --n-components 64 --n-samples 5000 --epochs 5
 ```
 
 **CUDA Out of Memory**: Disable GPU or reduce batch sizes:
+
 ```powershell
 # Force CPU usage
 CUDA_VISIBLE_DEVICES="" python main.py --dataset mnist

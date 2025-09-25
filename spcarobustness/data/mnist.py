@@ -1,4 +1,5 @@
-from typing import Tuple, Optional
+from typing import Optional, Tuple
+
 import numpy as np
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split

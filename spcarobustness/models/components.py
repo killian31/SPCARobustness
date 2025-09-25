@@ -1,4 +1,5 @@
 from typing import Optional
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -75,7 +76,6 @@ class ImageFlattenWrapper(nn.Module):
     def __init__(self, base: nn.Module):
         super().__init__()
         self.base = base
-        # expose inner classifier if available (helps with saving/loading utilities)
         if hasattr(base, "classifier"):
             self.classifier = base.classifier
 

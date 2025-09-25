@@ -1,28 +1,29 @@
 import argparse
-import numpy as np
 import logging
-from typing import List, Dict
-from spcarobustness.utils.logging_config import configure_logging
-from spcarobustness.models.components import (
-    FixedLinear,
-    FixedScaler,
-    ClassifierNN,
-    PipelineModel,
-    ImageFlattenWrapper,
-)
-from spcarobustness.train.trainer import train_pipeline_model
+from typing import Dict, List
+
+import numpy as np
+import torch
+from sklearn.decomposition import PCA, MiniBatchSparsePCA, SparsePCA
+from sklearn.preprocessing import StandardScaler
+
 from spcarobustness.attacks.factory import make_attack
 from spcarobustness.eval.metrics import evaluate_robustness
 from spcarobustness.eval.plots import (
     plot_benchmark,
-    show_adversarial_samples_mnist,
     show_adversarial_samples_cifar_binary,
+    show_adversarial_samples_mnist,
 )
-from spcarobustness.utils.io import model_path, save_classifier, load_classifier
-
-import torch
-from sklearn.decomposition import PCA, SparsePCA, MiniBatchSparsePCA
-from sklearn.preprocessing import StandardScaler
+from spcarobustness.models.components import (
+    ClassifierNN,
+    FixedLinear,
+    FixedScaler,
+    ImageFlattenWrapper,
+    PipelineModel,
+)
+from spcarobustness.train.trainer import train_pipeline_model
+from spcarobustness.utils.io import load_classifier, model_path, save_classifier
+from spcarobustness.utils.logging_config import configure_logging
 
 
 def _build_pipeline(
@@ -69,9 +70,6 @@ def _build_pipeline(
 
     from art.estimators.classification import PyTorchClassifier
 
-    # If attacks expect image-shaped inputs (e.g., SquareAttack), we can wrap the model to accept images
-    # while still operating on flattened vectors internally. When image_input_shape is provided,
-    # we use ImageFlattenWrapper and set input_shape accordingly.
     wrapped_model = model
     input_shape = (input_dim,)
     if image_input_shape is not None:
@@ -229,7 +227,6 @@ def run_experiment(args):
                 )
                 logger.info(f"Saved SPCA model to {spca_path}")
 
-    # Optionally subsample test set for faster attacks
     if getattr(args, "attack_n_test", None):
         n_use = min(len(X_test), int(args.attack_n_test))
         X_test_use = X_test[:n_use]
@@ -238,15 +235,12 @@ def run_experiment(args):
         X_test_use = X_test
         y_test_use = y_test
 
-    # Prepare clean inputs in the shape expected by ART (image-shaped)
     X_clean = X_test_use.reshape((-1,) + image_shape)
 
-    # eps sweep
     eps_list = np.arange(
         args.eps_start, args.eps_end + 1e-9, args.eps_step, dtype=np.float32
     )
 
-    # clean accuracy baseline
     def evaluate_dict(classifiers_dict):
         accs = {}
         for n_comp, clf in classifiers_dict.items():
@@ -260,7 +254,6 @@ def run_experiment(args):
     from tqdm import tqdm
 
     for attack in attacks:
-        # fresh copies of robust accuracy dicts (keep same clean baseline)
         pca_accs_att = {k: v[:] for k, v in pca_accs.items()}
         spca_accs_att = {k: v[:] for k, v in spca_accs.items()}
 
