@@ -2,6 +2,7 @@
 
 [![python](https://img.shields.io/badge/python-3.10%2B-green)]()
 [![pytorch](https://img.shields.io/badge/pytorch-2.2%2B-orange)]()
+[![arXiv](https://img.shields.io/badge/arXiv-2509.21130-b31b1b.svg)](https://arxiv.org/abs/2509.21130v2)
 
 A unified framework for benchmarking PCA vs SparsePCA pipelines under adversarial attacks. This repository evaluates the robustness of dimensionality reduction techniques by building end-to-end differentiable pipelines and testing them against various adversarial attacks.
 
@@ -225,3 +226,4 @@ python main.py --n-components 64 --n-samples 5000 --epochs 5
 # Force CPU usage
 CUDA_VISIBLE_DEVICES="" python main.py --dataset mnist
 ```
+
